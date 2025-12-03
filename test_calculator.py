@@ -36,10 +36,10 @@ class TestCalculator(unittest.TestCase):
     def test_subtraction_negative(self):
         self.assertEqual(calculate(-2, '-', -3), 1)
 
-    def test_subtraction_negative(self):
+    def test_subtraction_negative_one(self):
         self.assertEqual(calculate(-2, '-', 3), -5)
 
-    def test_multiplication_negative(self):
+    def test_multiplication_negative_one(self):
         self.assertEqual(calculate(-2, '*', 3), -6)
 
     def test_multiplication_negative(self):
@@ -48,7 +48,7 @@ class TestCalculator(unittest.TestCase):
     def test_division_negative(self):
         self.assertEqual(calculate(-4, '/', -2), 2)
 
-    def test_division_negative(self):
+    def test_division_negative_one(self):
         self.assertEqual(calculate(-4, '/', 2), -2)
 
 
