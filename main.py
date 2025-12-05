@@ -55,7 +55,7 @@ def main():
 
         result = calculate(num1, operation, num2)
         print(format_result(num1, operation, num2, result))
-        print("---------------------------------")
+        print('')
 
 
 if __name__ == "__main__":
