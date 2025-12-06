@@ -124,11 +124,32 @@ jobs:
           rm -rf build dist __pycache__ *.spec deb_package deb_package_gui
         #------------------------------------
 
-      - name: Build macOS GUI as .app bundle
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+
+      - name: Run tests
+        run: pytest
+
+      - name: Build CLI with PyInstaller (macOS)
+        run: pyinstaller --onefile --name calculator main.py
+
+      - name: Build GUI as .app bundle
         run: pyinstaller --onedir --windowed --name CalculatorGUI calc_gui.py
 
-
-      - name: Prepare CLI package
+      - name: Prepare CLI package root
         run: |
           mkdir -p pkg-root/usr/local/bin
           cp dist/calculator pkg-root/usr/local/bin/
@@ -143,8 +164,7 @@ jobs:
             --install-location / \
             calculator-macos.pkg
 
-
-      - name: Prepare GUI package
+      - name: Prepare GUI package root
         run: |
           mkdir -p gui-pkg-root/Applications
           cp -R dist/CalculatorGUI.app gui-pkg-root/Applications/
