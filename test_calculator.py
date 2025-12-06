@@ -14,7 +14,7 @@ class TestCalc(unittest.TestCase):
         self.assertEqual(calculate(3, '*', 4), 12)
 
     def test_division_positive(self):
-        self.assertEqual(calculate(8, '*', 8), 64)
+        self.assertEqual(calculate(64, '/', 8), 8)
 
     def test_division_by_zero(self):
         self.assertEqual(calculate(4, '/', 0), "Ошибка: деление на ноль")
