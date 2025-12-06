@@ -153,7 +153,7 @@ jobs:
           VERSION=${GITHUB_REF_NAME#v}
           pkgbuild \
             --root pkg-root \
-            --identifier ru.koronovonoe-pivo.calculator.cli \
+            --identifier calculator.cli \
             --version "$VERSION" \
             --install-location / \
             calculator-macos.pkg
@@ -168,7 +168,7 @@ jobs:
           VERSION=${GITHUB_REF_NAME#v}
           pkgbuild \
             --root gui-pkg-root \
-            --identifier ru.koronovonoe-pivo.calculator.gui \
+            --identifier calculator.gui \
             --version "$VERSION" \
             --install-location / \
             calculator-gui-macos.pkg
