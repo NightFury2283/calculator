@@ -54,9 +54,7 @@ jobs:
       - name: Clean build files
         run: |
           rm -rf build dist __pycache__ *.spec deb_package
-
-    runs-on: macos-latest
-    steps:
+          
       - name: Checkout repo
         uses: actions/checkout@v3
 
