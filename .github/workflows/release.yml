@@ -7,7 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -20,10 +19,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyinstaller pytest
+          pip install pyinstaller
 
       - name: Run tests
-        run: pytest
+        run: python -m unittest discover -v 
 
       - name: Build exe with PyInstaller
         run: pyinstaller --onefile main.py --name calculator.exe
@@ -89,7 +88,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
-      - name: Upload exe to Release
+      - name: Upload exe GUI to Release
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
@@ -99,26 +98,65 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
-      - name: Upload dpkg to Release
+      - name: Upload CLI deb to Release
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: deb_package.deb
           asset_name: calculator.deb
-          asset_content_type: application/octet-stream
+          asset_content_type: application/vnd.debian.binary-package
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
-      - name: Upload dpkg to Release
+
+      - name: Upload GUI deb to Release
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: deb_package_gui.deb
           asset_name: calculator_gui.deb
-          asset_content_type: application/octet-stream
+          asset_content_type: application/vnd.debian.binary-package
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
       - name: Clean build files
         run: |
-          rm -rf build dist __pycache__ *.spec deb_package
+          rm -rf build dist __pycache__ *.spec deb_package deb_package_gui
+
+      - name: Build macOS CLI
+        run: pyinstaller --onefile main.py --name calculator
+
+      - name: Build macOS GUI
+        run: pyinstaller --onefile --windowed calc_gui.py --name CalculatorGUI
+
+      - name: tar.gz archive for CLI
+        run: |
+          mkdir -p release-macos
+          cp dist/calculator release-macos/
+          tar -czf calculator-macos.tar.gz -C release-macos .
+
+      - name: tar.gz archive for GUI
+        run: |
+          mkdir -p release-macos-gui
+          cp dist/CalculatorGUI release-macos-gui/
+          tar -czf calculator-gui-macos.tar.gz -C release-macos-gui .
+
+      - name: macOS Release CLI
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: calculator-macos.tar.gz
+          asset_name: calculator-macos.tar.gz
+          asset_content_type: application/gzip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
+      - name: macOS GUI to Release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: calculator-gui-macos.tar.gz
+          asset_name: calculator-gui-macos.tar.gz
+          asset_content_type: application/gzip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
